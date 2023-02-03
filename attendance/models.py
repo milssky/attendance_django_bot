@@ -24,6 +24,22 @@ class Course(models.Model):
         return f"{self.name} - {self.lector}"
 
 
+class Schedule(models.Model):
+    lecture_datetime = models.DateTimeField(
+        verbose_name="Время проведения пары"
+    )
+    course = models.ForeignKey(
+        Course,
+        verbose_name="Курс",
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        ordering = ('-course__name',)
+        verbose_name = "Расписание"
+        verbose_name_plural = "Расписания"
+
+
 class Group(models.Model):
     index = models.CharField(
         verbose_name="Номер группы",
