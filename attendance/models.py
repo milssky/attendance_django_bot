@@ -39,6 +39,9 @@ class Schedule(models.Model):
         verbose_name = "Расписание"
         verbose_name_plural = "Расписания"
 
+    def __str__(self):
+        return f"{self.course} в {self.lecture_datetime:%R,%a}"
+
 
 class Group(models.Model):
     index = models.CharField(

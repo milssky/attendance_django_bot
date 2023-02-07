@@ -6,28 +6,40 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'attendance_bot.settings')
 django.setup()
 
-from telegram import Update
+from telegram import ParseMode, Update
 from telegram.ext import CallbackContext
 
 from attendance.models import Course, Student
 from tgbot.handlers.onboarding import static_text
 from tgbot.handlers.onboarding.keyboard import make_keyboard_for_start_command
+from tgbot.helpers import clear_data
+from tgbot.validators import validate_email
 
 
 def command_start(update: Update, context: CallbackContext) -> None:
-    text = static_text.start_success_text.format(first_name=update.effective_user.username)
-    update.message.reply_text(text=text)
+    text = static_text.start_success_text.format(
+        first_name=update.effective_user.username,
+        parse_mode=ParseMode.MARKDOWN_V2
+    )
+    update.message.reply_text(text=text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def command_email(update: Update, context: CallbackContext) -> None:
-    command, email = update.message.text.split(' ')
-    # TODO валидация email
+    try:
+        command, email = update.message.text.split()
+    except ValueError:
+        update.message.reply_text(text=static_text.email_empty)
+        return
+    email = clear_data(email)
+    if not validate_email(email):
+        update.message.reply_text(text=static_text.email_error_format)
+        return
     try:
         student = Student.objects.get(email=email)
         text = static_text.email_success.format(first_name=student.name)
         update.message.reply_text(text=text, reply_markup=make_keyboard_for_start_command(student))
     except Student.DoesNotExist:
-        update.message.reply_text(text=static_text.email_wrong.format(email=email))
+        update.message.reply_text(text=static_text.email_wrong.format(email=email), parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def course_handler(update: Update, context: CallbackContext) -> None:
