@@ -1,2 +1,4 @@
-start_success_text = "Привет, {first_name}"
-start_text = "{register}"
+start_success_text = ("Привет, {first_name}. Чтобы проставить метку о посещении отправь свой email в домене "
+                      "универа после команды /email. Пример: \"/email petrivich_777@bmstu.ru\"")
+email_success = "Отлично, {first_name}. Теперь нажми на курс, посещение которого хочешь отметить"
+email_wrong = "Нет такого студента в базе данных с почтой {email}. Обратитесь к преподавателю"
