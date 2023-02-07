@@ -9,10 +9,10 @@ django.setup()
 from telegram import ParseMode, Update
 from telegram.ext import CallbackContext
 
-from attendance.models import Course, Student
+from attendance.models import Course, Schedule, Student
 from tgbot.handlers.onboarding import static_text
 from tgbot.handlers.onboarding.keyboard import make_keyboard_for_start_command
-from tgbot.helpers import clear_data
+from tgbot.helpers import check_dates, clear_data
 from tgbot.validators import validate_email
 
 
@@ -46,9 +46,21 @@ def course_handler(update: Update, context: CallbackContext) -> None:
     course_name, student_id = update.callback_query.data.split("-")
     course = Course.objects.get(name=course_name)
     student = Student.objects.get(pk=student_id)
-
+    schedules = course.schedule_set.all()
+    now = datetime.now()
+    for schedule in schedules:
+        if not check_dates(now, schedule.lecture_datetime):
+            context.bot.send_message(
+                text=static_text.schedule_error_day.format(
+                    time=now.time().strftime("%H:%m"),
+                    day=now.date().strftime("%d.%m.%Y"),
+                    course=course.name
+                ),
+                chat_id=update.effective_user.id
+            )
+            return
 
     context.bot.send_message(
-        text=update.callback_query.data,
+        text=static_text.schedule_success.format(course=course.name),
         chat_id=update.effective_user.id
     )
