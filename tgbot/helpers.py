@@ -12,8 +12,8 @@ def _get_list_of_weekdays_between_dates(start_date: datetime, end_date: datetime
 
 def check_dates(now: datetime, lection_start_datetime: datetime) -> bool:
     for schedule_date in _get_list_of_weekdays_between_dates(lection_start_datetime,
-                                                            lection_start_datetime + timedelta(days=90),
+                                                             lection_start_datetime + timedelta(days=90),
                                                              lection_start_datetime.date().weekday()):
-        if schedule_date <= now <= schedule_date+timedelta(minutes=95):
+        if schedule_date <= now <= schedule_date + timedelta(minutes=95):
             return True
     return False
