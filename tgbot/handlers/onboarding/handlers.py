@@ -36,12 +36,14 @@ def command_email(update: Update, context: CallbackContext) -> None:
         return
     try:
         student = Student.objects.get(email=email)
-        # tg_student, created = TgStudent.objects.get_or_create(student=student, tg_username=update.message.chat.username)
-        # if not created:
-        #     update.message.reply_text(
-        #         text=static_text.cheating_with_wrong_tg_login.format(email=student.email)
-        #     )
-        #     return
+        if TgStudent.objects.filter(tg_username=update.message.chat.username).exists():
+            email_for_tglogin = TgStudent.objects.get(tg_username=update.message.chat.username).student.email
+            if email_for_tglogin != email:
+                update.message.reply_text(
+                    text=static_text.cheating_with_wrong_tg_login.format(email=email_for_tglogin)
+                )
+                return
+        TgStudent.objects.get_or_create(student=student, tg_username=update.message.chat.username)
         text = static_text.email_success.format(first_name=student.name)
         update.message.reply_text(text=text, reply_markup=make_keyboard_for_start_command(student))
     except Student.DoesNotExist:
