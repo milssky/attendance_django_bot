@@ -9,7 +9,7 @@ django.setup()
 from telegram import ParseMode, Update
 from telegram.ext import CallbackContext
 
-from attendance.models import Attendance, Course, Schedule, Student
+from attendance.models import Attendance, Course, Student, TgStudent
 from tgbot.handlers.onboarding import static_text
 from tgbot.handlers.onboarding.keyboard import make_keyboard_for_start_command
 from tgbot.helpers import check_dates, clear_data
@@ -36,6 +36,12 @@ def command_email(update: Update, context: CallbackContext) -> None:
         return
     try:
         student = Student.objects.get(email=email)
+        # tg_student, created = TgStudent.objects.get_or_create(student=student, tg_username=update.message.chat.username)
+        # if not created:
+        #     update.message.reply_text(
+        #         text=static_text.cheating_with_wrong_tg_login.format(email=student.email)
+        #     )
+        #     return
         text = static_text.email_success.format(first_name=student.name)
         update.message.reply_text(text=text, reply_markup=make_keyboard_for_start_command(student))
     except Student.DoesNotExist:

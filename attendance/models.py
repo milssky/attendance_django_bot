@@ -1,3 +1,5 @@
+from platform import version
+
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -86,6 +88,26 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.group.index}"
+
+
+class TgStudent(models.Model):
+    student = models.OneToOneField(
+        Student,
+        on_delete=models.CASCADE,
+        related_name="telegram"
+    )
+    tg_username = models.CharField(
+        verbose_name="Логин в телеграмм",
+        max_length=254
+    )
+
+    class Meta:
+        verbose_name = "Связь студента с телеграмм логином"
+        verbose_name_plural = "Связи студента с телеграмм логином"
+        ordering = ("tg_username",)
+
+    def __str__(self):
+        return f"{self.tg_username} - {self.student.name}"
 
 
 class Attendance(models.Model):

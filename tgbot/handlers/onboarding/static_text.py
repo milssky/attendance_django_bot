@@ -9,3 +9,6 @@ email_error_format = "С вашей почтой что-то не так или 
 schedule_error_day = "Во время {time} и день {day} нет пары по предмету {course}"
 schedule_success = "Отлично. Вы отмечены на паре предмета {course}."
 schedule_second_registration = "Вы сегодня уже отмечалили на курсе {course}"
+
+cheating_with_wrong_tg_login = ("С вашим логином телеграмма связана почта {email}. "
+                                "Дайте человеку самостоятельно отметится")
