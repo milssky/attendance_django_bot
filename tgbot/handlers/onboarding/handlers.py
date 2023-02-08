@@ -48,17 +48,30 @@ def course_handler(update: Update, context: CallbackContext) -> None:
     student = Student.objects.get(pk=student_id)
     schedules = course.schedule_set.all()
     now = datetime.now()
-    for schedule in schedules:
-        if not check_dates(now, schedule.lecture_datetime):
-            context.bot.send_message(
-                text=static_text.schedule_error_day.format(
-                    time=now.time().strftime("%H:%m"),
-                    day=now.date().strftime("%d.%m.%Y"),
-                    course=course.name
-                ),
-                chat_id=update.effective_user.id
-            )
-            return
+    list_of_attendances = [check_dates(now, schedule.lecture_datetime) for schedule in schedules]
+    if not any(list_of_attendances):
+        context.bot.send_message(
+            text=static_text.schedule_error_day.format(
+                time=now.time().strftime("%H:%m"),
+                day=now.date().strftime("%d.%m.%Y"),
+                course=course.name
+            ),
+            chat_id=update.effective_user.id
+        )
+        return
+
+    obj, created = Attendance.objects.get_or_create(
+        date=now.date(),
+        student=student,
+        course=course
+    )
+
+    if not created:
+        context.bot.send_message(
+            text=static_text.schedule_second_registration.format(course=course.name),
+            chat_id=update.effective_user.id
+        )
+        return
 
     context.bot.send_message(
         text=static_text.schedule_success.format(course=course.name),

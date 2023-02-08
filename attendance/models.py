@@ -95,8 +95,7 @@ class Attendance(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Студент"
     )
-    date = models.DateTimeField(
-        auto_now_add=True,
+    date = models.DateField(
         verbose_name="Дата посещения курса"
     )
     course = models.ForeignKey(
