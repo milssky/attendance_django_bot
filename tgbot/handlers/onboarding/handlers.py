@@ -46,9 +46,9 @@ def course_handler(update: Update, context: CallbackContext) -> None:
     course_name, student_id = update.callback_query.data.split("-")
     course = Course.objects.get(name=course_name)
     student = Student.objects.get(pk=student_id)
-    schedules = course.schedule_set.all()
+    dates_of_lessons = course.schedule_set.all()
     now = datetime.now()
-    list_of_attendances = [check_dates(now, schedule.lecture_datetime) for schedule in schedules]
+    list_of_attendances = [check_dates(now, lesson_schedule.lecture_datetime) for lesson_schedule in dates_of_lessons]
     if not any(list_of_attendances):
         context.bot.send_message(
             text=static_text.schedule_error_day.format(
