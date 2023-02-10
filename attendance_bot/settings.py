@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", default="Kolbasa")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", default=False) == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "justfound.ru", "web"]
 
 
 # Application definition
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
+    'django_celery_beat',
     "attendance",
     "tgbot",
 ]
@@ -44,12 +46,19 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = ['https://*.justfound.ru','https://*.127.0.0.1', 'http://*.justfound.ru','http://*.127.0.0.1']
 
 ROOT_URLCONF = "attendance_bot.urls"
 
@@ -75,11 +84,23 @@ WSGI_APPLICATION = "attendance_bot.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
+#
+# if DEBUG:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.sqlite3",
+#             "NAME": BASE_DIR / "db.sqlite3",
+#         }
+#     }
+# else:
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": os.environ.get("SQL_USER", "user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
 
@@ -119,9 +140,21 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-TG_BOT_TOKEN=os.getenv("TG_BOT_TOKEN")
+TG_BOT_TOKEN= os.getenv("TG_BOT_TOKEN")
+
+# -----> CELERY
+REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379')
+BROKER_URL = REDIS_URL
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_DEFAULT_QUEUE = 'default'

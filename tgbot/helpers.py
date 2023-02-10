@@ -5,7 +5,7 @@ def clear_data(data: str) -> str:
     return data.strip()
 
 
-def _get_list_of_weekdays_between_dates(start_date: datetime, end_date: datetime, week_day: int) -> list[datetime]:
+def _get_list_of_weekdays_between_dates(start_date: datetime, end_date: datetime, week_day: int):
     days = (start_date + timedelta(i) for i in range((end_date - start_date).days + 1))
     return [day for day in days if day.weekday() == week_day]
 

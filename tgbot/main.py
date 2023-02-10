@@ -16,4 +16,4 @@ except telegram.error.Unauthorized:
     logging.error("Неверный токен")
     sys.exit(1)
 else:
-    logging.ingo(f"Бот {TELEGRAM_BOT_USERNAME} запущен")
+    logging.info(f"Бот {TELEGRAM_BOT_USERNAME} запущен")
