@@ -25,7 +25,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", default="Kolbasa")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", default=False) == "True"
 
-ALLOWED_HOSTS = ["127.0.0.1", "justfound.ru", "web"]
+ALLOWED_HOSTS = ["127.0.0.1", "justfound.ru", "web", "45.95.203.81"]
 
 
 # Application definition
@@ -58,7 +58,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = ['https://*.justfound.ru','https://*.127.0.0.1', 'http://*.justfound.ru','http://*.127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://justfound.ru','https://127.0.0.1', 'http://justfound.ru','http://127.0.0.1', 'http://web', 'https://web']
 
 ROOT_URLCONF = "attendance_bot.urls"
 

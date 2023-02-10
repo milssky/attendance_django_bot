@@ -4,4 +4,7 @@ venv
 .idea
 __pycache__
 static
+certbot
 .env
+init-letsencrypt.sh
+

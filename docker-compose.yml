@@ -33,8 +33,10 @@ services:
 
   nginx:
     image: nginx:1.19.3
+    container_name: nginx_bot
     ports:
-      - "80:80"
+      - 80:80
+      - 443:443
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./certbot/conf:/etc/letsencrypt
@@ -49,6 +51,7 @@ services:
   certbot:
     image: certbot/certbot
     restart: unless-stopped
+    container_name: certbot_bot
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
