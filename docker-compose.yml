@@ -18,7 +18,7 @@ services:
     container_name: redis_bot
 
   web:
-    build: .
+    image: milssky/attendance_bot:latest
     container_name: django_bot
     volumes:
       - .:/code

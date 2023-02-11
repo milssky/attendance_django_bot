@@ -6,6 +6,21 @@ on:
   push
 
 jobs:
+  Make_and_push_docker_image:
+    name: Push docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: push to docker
+        uses: docker/build-push-action@v4
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: milssky/attendance_bot
+          tag_with_ref: yes
+
   Server_connect:
     runs-on: ubuntu-latest
     steps:
@@ -18,6 +33,7 @@ jobs:
           script: |
             cd attendance_django_bot/
             git pull
+            
             sudo docker compose stop
             sudo docker compose rm web
             sudo docker compose up -d --build
