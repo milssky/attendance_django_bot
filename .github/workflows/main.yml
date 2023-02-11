@@ -6,7 +6,15 @@ on:
   push
 
 jobs:
-  Test_job:
+  Server_connect:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Привет. Я задача из пайплдайна"
+      - name: Запустить скрипт на удаленном сервере
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          pasphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            sudo ls
