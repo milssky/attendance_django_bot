@@ -47,7 +47,7 @@ jobs:
             cd attendance_django_bot/
             sudo docker compose stop
             sudo docker compose rm django_bot
-            sudo docker rmi milssky/attendance_bot
+            sudo docker rmi -f  milssky/attendance_bot
             sudo docker pull milssky/attendance_bot
             sudo docker compose up -d 
 
