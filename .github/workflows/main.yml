@@ -23,6 +23,7 @@ jobs:
 
   Server_connect:
     runs-on: ubuntu-latest
+    needs: Make_and_push_docker_image
     steps:
       - name: Запустить скрипт на удаленном сервере
         uses: appleboy/ssh-action@master
