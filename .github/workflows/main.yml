@@ -9,7 +9,7 @@ jobs:
   Server_connect:
     runs-on: ubuntu-latest
     steps:
-      - name: Запустить скрипт на удаленном сервере
+      - name: Запустить скрипт на удаленном сервере.
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
