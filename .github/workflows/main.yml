@@ -16,4 +16,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo ls
+            cd attendance_django_bot/
+            git pull
+            sudo docker compose stop
+            sudo docker compose rm web
+            sudo docker compose up -d --build
+

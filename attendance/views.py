@@ -16,7 +16,7 @@ def process_telegram_event(update_json):
 
 
 def index(request):
-    return JsonResponse({"error": "How are you?"})
+    return JsonResponse({"error": "Fine?"})
 
 
 class TelegramBotWebhookView(View):
