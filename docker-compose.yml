@@ -18,7 +18,7 @@ services:
     container_name: redis_bot
 
   web:
-    image: milssky/attendance_bot:latest
+    image: milssky/attendance_bot:master
     container_name: django_bot
     volumes:
       - .:/code
@@ -58,7 +58,7 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   celery:
-    image: milssky/attendance_bot:latest
+    image: milssky/attendance_bot:master
     container_name: celery_bot
     command: celery -A attendance_bot worker --loglevel=INFO
     volumes:
@@ -70,7 +70,7 @@ services:
       - web
 
   celery-beat:
-    image: milssky/attendance_bot:latest
+    image: milssky/attendance_bot:master
     container_name: celery_beat_bot
     command: celery -A attendance_bot beat --loglevel=INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
