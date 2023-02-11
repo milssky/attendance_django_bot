@@ -12,7 +12,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-
+      - name: build
+        uses: docker/setup-buildx-action@v1
       - name: push to docker
         uses: docker/build-push-action@v4
         with:
