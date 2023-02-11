@@ -35,8 +35,8 @@ jobs:
           script: |
             cd attendance_django_bot/
             git pull
-            
+            sudo docker pull milssky/attendance_bot
             sudo docker compose stop
-            sudo docker compose rm web
-            sudo docker compose up -d --build
+            sudo docker compose rm django_bot
+            sudo docker compose up -d 
 
