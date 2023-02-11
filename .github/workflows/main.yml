@@ -33,8 +33,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd attendance_django_bot/
-            git pull
             sudo docker pull milssky/attendance_bot
             sudo docker compose stop
             sudo docker compose rm django_bot
