@@ -1,0 +1,12 @@
+name: List server files
+
+run-name: ${{ github.actor }} запросил файлы на сервере
+
+on:
+  push
+
+jobs:
+  Test_job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Привет. Я задача из пайплдайна"
