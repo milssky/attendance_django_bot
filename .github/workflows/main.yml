@@ -46,6 +46,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd attendance_django_bot/
+            gut pull
             sudo docker compose down
             sudo docker rmi -f  milssky/attendance_bot
             sudo docker pull milssky/attendance_bot:master
